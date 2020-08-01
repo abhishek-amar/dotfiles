@@ -64,7 +64,7 @@ layouts = [
     layout.Max(),
     layout.Stack(num_stacks=2),
     # Try more layouts by unleashing below layouts.
-    layout.Bsp(**layout_theme),
+    # layout.Bsp(),
     # layout.Columns(),
     # layout.Matrix(),
     layout.MonadTall(**layout_theme),
@@ -109,20 +109,23 @@ screens = [
                 ),
                 widget.Prompt(),
                 widget.WindowName(),
-                widget.Systray(),
-		widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[2]),
-        	widget.CurrentLayout(background = colours[2]),
-		widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[3], background = colours[2]),
-		# Use lshw to get the interface argument, which is the logical name, use a list for multiple entries
-		widget.Net(interface = 'enp0s3', format = '{down} ↓↑ {up}', background = colours[3]),
-		widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[2], background = colours[3]),
-		widget.CPU(background = colours[2]),
-		widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[3], background = colours[2]),
-		widget.Memory(background = colours[3]),
-		widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[2], background = colours[3]),
-        widget.Clock(format='%d-%m-%Y %a %I:%M %p', background = colours[2])
-            ],
-            size = 24, background = colours[0]
+        		widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[2]),
+                widget.CurrentLayout(background = colours[2]),
+        		widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[3], background = colours[2]),
+        		# Use lshw to get the interface argument, which is the logical name, use a list for multiple entries
+        		widget.Net(interface = 'enp0s3', format = '{down} ↓↑ {up}', background = colours[3]),
+        		widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[2], background = colours[3]),
+        		widget.CPU(background = colours[2]),
+        		widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[3], background = colours[2]),
+        		widget.Memory(background = colours[3]),
+        		widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[2], background = colours[3]),
+                widget.TextBox(text = 'Vol:', padding = 0, foreground = colours[4], background = colours[2]),
+                widget.Volume(foreground = colours[4], background = colours[2], padding = 5),
+                widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[3], background = colours[2]),
+                widget.Clock(format='%d-%m-%Y %a %I:%M %p', background = colours[3]),
+                widget.Systray()
+                    ],
+                    size = 24, background = colours[0]
         ),
     ),
 ]
