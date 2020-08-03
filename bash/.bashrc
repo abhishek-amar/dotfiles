@@ -60,17 +60,17 @@ unset color_prompt force_color_prompt
 bold=$(tput bold);
 reset=$(tput sgr0);
 if [ "$EUID" -ne 0 ]; then
-    PS1="${bold}\e[38;2;171;178;191m[\e[m";
-    PS1+="${bold}\e[38;2;97;175;239m\u\e[m";
-    PS1+="${bold}\e[38;2;152;195;121m@\e[m";
-    PS1+="${bold}\e[38;2;198;120;221m\h: \e[m";
-    PS1+="${bold}\e[38;2;86;182;194m\w\e[m";
-    PS1+="${bold}\e[38;2;171;178;191m]\e[m";
-    PS1+="${bold}\e[38;2;229;192;123m$ \e[m";
+    PS1="${bold}\[\e[38;2;171;178;191m[\e[m\]";
+    PS1+="${bold}\[\e[38;2;97;175;239m\u\e[m\]";
+    PS1+="${bold}\[\e[38;2;152;195;121m@\e[m\]";
+    PS1+="${bold}\[\e[38;2;198;120;221m\h: \e[m\]";
+    PS1+="${bold}\[\e[38;2;86;182;194m\w\e[m\]";
+    PS1+="${bold}\[\e[38;2;171;178;191m]\e[m\]";
+    PS1+="${bold}\[\e[38;2;229;192;123m$ \e[m\]";
     PS1+="${reset}";
 
 else
-    PS1="${bold}\e[38;2;224;108;117m[\u@\h \W]# \e[m";
+    PS1="${bold}\[\e[38;2;224;108;117m[\u@\h \W]# \e[m\]";
     PS+="${reset}";
 fi
 # If this is an xterm set the title to user@host:dir
