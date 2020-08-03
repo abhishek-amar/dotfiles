@@ -78,6 +78,9 @@ let g:python_highlight_all=1
 " To enable statusbar
 set laststatus=2
 
+" Highlight current line
+set cursorline
+
 " Set statusbar colour scheme
 let g:lightline = {
 	\ 'colorscheme': 'one',
