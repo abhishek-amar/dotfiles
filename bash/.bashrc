@@ -30,81 +30,36 @@ shopt -s checkwinsize
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-# set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
-fi
-
-# set a fancy prompt (non-color, unless we know we "want" color)
-case "$TERM" in
-    xterm-color|*-256color) color_prompt=yes;;
-esac
-
-# uncomment for a colored prompt, if the terminal has the capability; turned
-# off by default to not distract the user: the focus in a terminal window
-# should be on the output of commands, not on the prompt
-#force_color_prompt=yes
-
-if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
-    else
-	color_prompt=
-    fi
-fi
-
-unset color_prompt force_color_prompt
 bold=$(tput bold);
-reset=$(tput sgr0);
 if [ "$EUID" -ne 0 ]; then
-    PS1="${bold}\[\e[38;2;171;178;191m[\e[m\]";
-    PS1+="${bold}\[\e[38;2;97;175;239m\u\e[m\]";
-    PS1+="${bold}\[\e[38;2;152;195;121m@\e[m\]";
-    PS1+="${bold}\[\e[38;2;198;120;221m\h: \e[m\]";
-    PS1+="${bold}\[\e[38;2;86;182;194m\w\e[m\]";
-    PS1+="${bold}\[\e[38;2;171;178;191m]\e[m\]";
-    PS1+="${bold}\[\e[38;2;229;192;123m$ \e[m\]";
-    PS1+="${reset}";
-
+    PS1="\[${bold}\]\[\e[38;2;171;178;191m\][\[\e[m\]";
+    PS1+="\[${bold}\]\[\e[38;2;97;175;239m\]\u\[\e[m\]";
+    PS1+="\[${bold}\]\[\e[38;2;152;195;121m\]@\[\e[m\]";
+    PS1+="\[${bold}\]\[\e[38;2;198;120;221m\]\h: \[\e[m\]";
+    PS1+="\[${bold}\]\[\e[38;2;86;182;194m\]\w\[\e[m\]";
+    PS1+="\[${bold}\]\[\e[38;2;171;178;191m\]]\[\e[m\]";
+    PS1+="\[${bold}\]\[\e[38;2;229;192;123m\]$ \[\e[m\]";
 else
-    PS1="${bold}\[\e[38;2;224;108;117m[\u@\h \W]# \e[m\]";
-    PS+="${reset}";
-fi
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
+    # Need to edit .bashrc of root user and add this or link it to regular user for this to take effect.
+    PS1="\[${bold}\]\[\e[38;2;224;108;117m\][\u@\h \W]# \[\e[m\]";
 
+fi
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
+    alias dir='dir --color=auto'
+    alias vdir='vdir --color=auto'
 
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
 fi
 
-# colored GCC warnings and errors
-#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
 # some more ls aliases
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
-
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
