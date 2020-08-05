@@ -30,20 +30,39 @@ shopt -s checkwinsize
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
+# To allow git branch to be shown in the prompt
+# In Ubuntu this file is located at /usr/lib/git-core/ as git-sh-prompt
+# In Arch this file is located at /usr/share/git/completion/ as git-prompt.bash
+# Copy this file to ~ as .git-prompt.sh or provide the path directly
+source $HOME/.git-prompt.sh
+
 bold=$(tput bold);
 if [ "$EUID" -ne 0 ]; then
-    PS1="\[${bold}\]\[\e[38;2;171;178;191m\][\[\e[m\]";
-    PS1+="\[${bold}\]\[\e[38;2;97;175;239m\]\u\[\e[m\]";
-    PS1+="\[${bold}\]\[\e[38;2;152;195;121m\]@\[\e[m\]";
-    PS1+="\[${bold}\]\[\e[38;2;198;120;221m\]\h: \[\e[m\]";
-    PS1+="\[${bold}\]\[\e[38;2;86;182;194m\]\w\[\e[m\]";
-    PS1+="\[${bold}\]\[\e[38;2;171;178;191m\]]\[\e[m\]";
-    PS1+="\[${bold}\]\[\e[38;2;229;192;123m\]$ \[\e[m\]";
+    # Use single quotes rather than double quotes else bash will evaluate it first even before the bash prompt has been drawn
+    # Double quotes will cause git branch name to fail to update when you cd because it would have been evaluated before.
+    PS1='\[${bold}\]\[\e[38;2;171;178;191m\][\[\e[m\]';
+    PS1+='\[${bold}\]\[\e[38;2;97;175;239m\]\u\[\e[m\]';
+    PS1+='\[${bold}\]\[\e[38;2;152;195;121m\]@\[\e[m\]';
+    PS1+='\[${bold}\]\[\e[38;2;198;120;221m\]\h: \[\e[m\]';
+    PS1+='\[${bold}\]\[\e[38;2;86;182;194m\]\w\[\e[m\]';
+    PS1+='\[${bold}\]\[\e[38;2;171;178;191m\]]\[\e[m\]';
+    PS1+='\[${bold}\]\[\e[38;2;224;108;117m\]$(__git_ps1 " (%s)")\[\e[m\]';
+    PS1+='\[${bold}\]\[\e[38;2;229;192;123m\]\$ \[\e[m\]';
 else
-    # Need to edit .bashrc of root user and add this or link it to regular user for this to take effect.
-    PS1="\[${bold}\]\[\e[38;2;224;108;117m\][\u@\h \W]# \[\e[m\]";
+    # Need to edit .bashrc of root user and add this or link it to regular user's .bashrc for this to take effect.
+    PS1='\[${bold}\]\[\e[38;2;224;108;117m\][\u@\h \W]# \[\e[m\]';
 
 fi
+
+# Modify terminal window name
+case "$TERM" in
+xterm*|rxvt*)
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    ;;
+*)
+    ;;
+esac
+
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
