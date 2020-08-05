@@ -66,7 +66,12 @@ esac
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
+    # Use first for Arch and second for Ubuntu
+    # To install exa in Ubuntu:
+    # sudo apt install cargo
+    # cargo install exa
+    alias ls='exa -al --color=always --group-directories-first'
+    # alias ls='$HOME/.cargo/bin/exa -al --color=always --group-directories-first'
     alias dir='dir --color=auto'
     alias vdir='vdir --color=auto'
 
