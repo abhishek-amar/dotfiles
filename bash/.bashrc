@@ -31,10 +31,11 @@ shopt -s checkwinsize
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # To allow git branch to be shown in the prompt
+
+source $HOME/.git-prompt.sh
 # In Ubuntu this file is located at /usr/lib/git-core/ as git-sh-prompt
 # In Arch this file is located at /usr/share/git/completion/ as git-prompt.bash
 # Copy this file to ~ as .git-prompt.sh or provide the path directly
-source $HOME/.git-prompt.sh
 
 bold=$(tput bold);
 if [ "$EUID" -ne 0 ]; then
@@ -57,7 +58,7 @@ fi
 # Modify terminal window name
 case "$TERM" in
 xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    PS1="\[\e]0;\u@\h: \w\a\]$PS1"
     ;;
 *)
     ;;
@@ -66,12 +67,11 @@ esac
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    # Use first for Arch and second for Ubuntu
-    # To install exa in Ubuntu:
-    # sudo apt install cargo
-    # cargo install exa
-    alias ls='exa -al --color=always --group-directories-first'
-    # alias ls='$HOME/.cargo/bin/exa -al --color=always --group-directories-first'
+
+# Replacing ls command with exa
+# Use $HOME/.cargo/bin/exa for Ubuntu and exa for Arch
+# To install exa in Ubuntu: sudo apt install cargo && cargo install exa
+    alias ls='exa --color=always --group-directories-first'
     alias dir='dir --color=auto'
     alias vdir='vdir --color=auto'
 
@@ -80,15 +80,13 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
-# some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
-
 # Alias definitions.
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+# Replace vim with neovim
+alias vim='nvim'
 
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
