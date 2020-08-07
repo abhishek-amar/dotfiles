@@ -37,7 +37,11 @@ keys = [
     Key([mod, "control"], "q", lazy.shutdown()),
     Key([mod], "r", lazy.spawncmd()),
     Key([mod], "space", lazy.window.toggle_floating()),
-    Key([mod], "f", lazy.window.toggle_fullscreen())
+    Key([mod], "f", lazy.window.toggle_fullscreen()),
+    # Audio key controls. Install alsa-utils package for this
+    Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle")),
+    Key([], "XF86AudioLowerVolume", lazy.spawn("amixer -c 0 sset Master 1- unmute")),
+    Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer -c 0 sset Master 1+ unmute"))
 ]
 
 
