@@ -34,7 +34,6 @@ shopt -s checkwinsize
 
 source $HOME/.git-prompt.sh
 # In Ubuntu this file is located at /usr/lib/git-core/ as git-sh-prompt
-# In Arch this file is located at /usr/share/git/completion/ as git-prompt.bash
 # Copy this file to ~ as .git-prompt.sh or provide the path directly
 
 bold=$(tput bold);
