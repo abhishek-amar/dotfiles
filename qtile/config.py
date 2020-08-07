@@ -1,4 +1,4 @@
-from libqtile.config import Key, Screen, Group, Drag, Click
+from libqtile.config import Key, Screen, Group, Drag, Click, ScratchPad, DropDown
 from libqtile.lazy import lazy
 from libqtile import layout, bar, widget
 
@@ -27,7 +27,7 @@ keys = [
     # multiple stack panes
    #  Key([mod, "shift"], "Return", lazy.layout.toggle_split()),
     Key([mod, "shift"], "Return", lazy.spawn("pcmanfm")),
-    Key([mod], "Return", lazy.spawn("xterm")),
+    Key([mod], "Return", lazy.spawn("kitty")),
 
     # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout()),
@@ -36,6 +36,8 @@ keys = [
     Key([mod, "control"], "r", lazy.restart()),
     Key([mod, "control"], "q", lazy.shutdown()),
     Key([mod], "r", lazy.spawncmd()),
+    Key([mod], "space", lazy.window.toggle_floating()),
+    Key([mod], "f", lazy.window.toggle_fullscreen())
 ]
 
 
@@ -48,7 +50,9 @@ for index, each_group in enumerate(groups, 1):
 		Key([mod, "shift"], str(index), lazy.window.togroup(each_group.name, switch_group = True)),
 		# Make switch_group = False if you don't want to go to new workspace along with window
 	])
+groups.append(ScratchPad("scratchpad", [DropDown("term", "kitty bashtop", x = 0, y = 0, width = 1, height = 0.6, on_focus_lost_hide = True)]))
 
+keys.append(Key([mod], 'x', lazy.group['scratchpad'].dropdown_toggle('term')))
 
 colours = ['#292d3e', '#ff5555', '#5eb0db', '#668bd7', '#ffffff', '#434758', '#e1acff', '#1D2330']
 # Panel background, Panel active workspace, Panel inactive workspace, Widget Colour, Panel Text, Group highlight color, Border focus, Border Normal(unfocused)
@@ -111,14 +115,14 @@ screens = [
                 widget.WindowName(),
         		widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[2]),
                 widget.CurrentLayout(background = colours[2]),
-        		widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[3], background = colours[2]),
-        		# Use lshw to get the interface argument, which is the logical name, use a list for multiple entries
-        		widget.Net(interface = 'enp0s3', format = '{down} ↓↑ {up}', background = colours[3]),
-        		widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[2], background = colours[3]),
-        		widget.CPU(background = colours[2]),
-        		widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[3], background = colours[2]),
-        		widget.Memory(background = colours[3]),
-        		widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[2], background = colours[3]),
+        	widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[3], background = colours[2]),
+        	# Use lshw to get the interface argument, which is the logical name, use a list for multiple entries
+        	widget.Net(interface = 'enp0s3', format = '{down} ↓↑ {up}', background = colours[3]),
+        	widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[2], background = colours[3]),
+        	widget.CPU(background = colours[2]),
+        	widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[3], background = colours[2]),
+        	widget.Memory(background = colours[3]),
+        	widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[2], background = colours[3]),
                 widget.TextBox(text = 'Vol:', padding = 0, foreground = colours[4], background = colours[2]),
                 widget.Volume(foreground = colours[4], background = colours[2], padding = 5),
                 widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[3], background = colours[2]),
