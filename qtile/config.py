@@ -1,8 +1,9 @@
 from libqtile.config import Key, Screen, Group, Drag, Click, ScratchPad, DropDown
 from libqtile.lazy import lazy
-from libqtile import layout, bar, widget
-
+from libqtile import layout, bar, widget, hook
 from typing import List
+import os
+import subprocess
 
 mod = "mod4"
 
@@ -16,7 +17,7 @@ keys = [
     Key([mod, "control"], "j", lazy.layout.shuffle_up()),
 
     # Switch window focus to other pane(s) of stack
-    Key([mod], "space", lazy.layout.next()),
+    Key([mod], "s", lazy.layout.next()),
 
     # Swap panes of split stack
     Key([mod, "shift"], "space", lazy.layout.rotate()),
@@ -25,8 +26,8 @@ keys = [
     # Split = all windows displayed
     # Unsplit = 1 window displayed, like Max layout, but still with
     # multiple stack panes
-   #  Key([mod, "shift"], "Return", lazy.layout.toggle_split()),
-    Key([mod, "shift"], "Return", lazy.spawn("pcmanfm")),
+    # Key([mod, "shift"], "Return", lazy.layout.toggle_split()),
+    Key([mod, "shift"], "Return", lazy.spawn("thunar")),
     Key([mod], "Return", lazy.spawn("kitty")),
 
     # Toggle between different layouts as defined below
@@ -38,10 +39,16 @@ keys = [
     Key([mod], "r", lazy.spawncmd()),
     Key([mod], "space", lazy.window.toggle_floating()),
     Key([mod], "f", lazy.window.toggle_fullscreen()),
-    # Audio key controls. Install alsa-utils package for this
-    Key([], "XF86AudioMute", lazy.spawn("amixer -q set Master toggle")),
-    Key([], "XF86AudioLowerVolume", lazy.spawn("amixer -c 0 sset Master 1- unmute")),
-    Key([], "XF86AudioRaiseVolume", lazy.spawn("amixer -c 0 sset Master 1+ unmute"))
+    
+    # Audio key controls.
+    
+    Key([], "XF86AudioMute", lazy.spawn("pactl set-sink-mute 0 toggle")),
+    Key([], "XF86AudioLowerVolume", lazy.spawn("pactl set-sink-volume 0 -2%")),
+    Key([], "XF86AudioRaiseVolume", lazy.spawn("pactl set-sink-volume 0 +2%")),
+    
+    # Run dmenu
+    
+    Key([mod], "d", lazy.spawn("dmenu_run -nb '#292d3e' -nf '#abb2bf' -sf '#ffffff' -sb '#e06c75' -p 'Run' -fn 'JetBrains Mono:bold:pixelsize=13' -h 20"))
 ]
 
 
@@ -54,12 +61,14 @@ for index, each_group in enumerate(groups, 1):
 		Key([mod, "shift"], str(index), lazy.window.togroup(each_group.name, switch_group = True)),
 		# Make switch_group = False if you don't want to go to new workspace along with window
 	])
-groups.append(ScratchPad("scratchpad", [DropDown("term", "kitty bashtop", x = 0, y = 0, width = 1, height = 0.6, on_focus_lost_hide = True)]))
+
+# Dropdown for bashtop task manager
+groups.append(ScratchPad("scratchpad", [DropDown("term", "kitty bashtop", x = 0, y = 0, width = 1, height = 0.65, on_focus_lost_hide = True)]))
 
 keys.append(Key([mod], 'x', lazy.group['scratchpad'].dropdown_toggle('term')))
 
-colours = ['#292d3e', '#ff5555', '#5eb0db', '#668bd7', '#ffffff', '#434758', '#e1acff', '#1D2330']
-# Panel background, Panel active workspace, Panel inactive workspace, Widget Colour, Panel Text, Group highlight color, Border focus, Border Normal(unfocused)
+colours = ['#292d3e', '#e06c75', '#5eb0db', '#668bd7', '#ffffff', '#434758', '#5eb0db', '#1D2330']
+# Panel background, Panel active workspace(line highlight), Widget Colour 1, Widget Colour 2, Panel Text, Group highlight color(Active), Window Border focus, Window Border Normal(unfocused)
 
 layout_theme = {
 "border_width": 1,
@@ -70,7 +79,7 @@ layout_theme = {
 
 layouts = [
     layout.Max(),
-    layout.Stack(num_stacks=2),
+    layout.Stack(num_stacks=2, **layout_theme),
     # Try more layouts by unleashing below layouts.
     # layout.Bsp(),
     # layout.Columns(),
@@ -85,7 +94,7 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font='sans',
+    font='JetBrains Mono',
     fontsize=12,
     padding=3,
 )
@@ -97,7 +106,7 @@ screens = [
         top=bar.Bar(
             [
                 widget.GroupBox(
-                    fontsize = 9,
+                    fontsize = 10,
                     margin_y = 3,
                     margin_x = 0,
                     padding_y = 5,
@@ -117,21 +126,23 @@ screens = [
                 ),
                 widget.Prompt(),
                 widget.WindowName(),
-        		widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[2]),
+				widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[2]),
                 widget.CurrentLayout(background = colours[2]),
-        	widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[3], background = colours[2]),
-        	# Use lshw to get the interface argument, which is the logical name, use a list for multiple entries
-        	widget.Net(interface = 'enp0s3', format = '{down} ↓↑ {up}', background = colours[3]),
-        	widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[2], background = colours[3]),
-        	widget.CPU(background = colours[2]),
-        	widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[3], background = colours[2]),
-        	widget.Memory(background = colours[3]),
-        	widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[2], background = colours[3]),
+				widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[3], background = colours[2]),
+				# Use lshw to get the interface argument, which is the logical name, use a list for multiple entries if needed
+				widget.Net(interface = 'wlo1', format = '{down} ↓↑ {up}', background = colours[3]),
+				widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[2], background = colours[3]),
+				widget.CPU(background = colours[2]),
+				widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[3], background = colours[2]),
+				widget.TextBox(text = 'RAM', padding = 0, background = colours[3]),
+				widget.Memory(background = colours[3]),
+				widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[2], background = colours[3]),
                 widget.TextBox(text = 'Vol:', padding = 0, foreground = colours[4], background = colours[2]),
                 widget.Volume(foreground = colours[4], background = colours[2], padding = 5),
                 widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[3], background = colours[2]),
                 widget.Clock(format='%d-%m-%Y %a %I:%M %p', background = colours[3]),
-                widget.Systray()
+                widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[2], background = colours[3]),
+                widget.Systray(background = colours[2])
                     ],
                     size = 24, background = colours[0]
         ),
@@ -146,6 +157,7 @@ mouse = [
          start=lazy.window.get_size()),
     Click([mod], "Button2", lazy.window.bring_to_front())
 ]
+
 
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: List
@@ -169,9 +181,14 @@ floating_layout = layout.Floating(float_rules=[
     {'wname': 'branchdialog'},  # gitk
     {'wname': 'pinentry'},  # GPG key password entry
     {'wmclass': 'ssh-askpass'},  # ssh-askpass
-])
+], **layout_theme)
 auto_fullscreen = True
 focus_on_window_activation = "smart"
 
+# Run autostart.sh
+@hook.subscribe.startup_once
+def start_once():
+    home = os.path.expanduser('~')
+    subprocess.call([home + '/.config/qtile/autostart.sh'])
 
 wmname = "LG3D"
