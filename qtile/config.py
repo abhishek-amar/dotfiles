@@ -106,6 +106,7 @@ screens = [
         top=bar.Bar(
             [
                 widget.GroupBox(
+					font = 'JetBrainsMono Bold',
                     fontsize = 10,
                     margin_y = 3,
                     margin_x = 0,

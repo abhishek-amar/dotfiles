@@ -11,3 +11,6 @@ xfce4-power-manager &
 
 # Start compositor (for transparency, shadows and fade)
 picom --config $HOME/.config/picom/picom.conf &
+
+# Start music player daemon
+mpd &
