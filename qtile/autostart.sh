@@ -14,3 +14,6 @@ picom --config $HOME/.config/picom/picom.conf &
 
 # Start music player daemon
 mpd &
+
+# Turn on numlock
+numlockx on &
