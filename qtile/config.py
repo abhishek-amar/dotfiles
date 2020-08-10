@@ -48,7 +48,12 @@ keys = [
     
     # Run dmenu
     
-    Key([mod], "d", lazy.spawn("dmenu_run -nb '#292d3e' -nf '#abb2bf' -sf '#ffffff' -sb '#e06c75' -p 'Run' -fn 'JetBrains Mono:bold:pixelsize=13' -h 20"))
+    Key([mod], "d", lazy.spawn("dmenu_run -nb '#292d3e' -nf '#abb2bf' -sf '#ffffff' -sb '#e06c75' -p 'Run' -fn 'JetBrains Mono:bold:pixelsize=13' -h 20")),
+
+    # Resize windows in monadtall layout
+    # Direction of growing and shrinking of window size depends on the window's position
+    Key([mod], "l", lazy.layout.grow()),
+    Key([mod], "h", lazy.layout.shrink())
 ]
 
 
@@ -106,7 +111,7 @@ screens = [
         top=bar.Bar(
             [
                 widget.GroupBox(
-					font = 'JetBrainsMono Bold',
+   		    font = 'JetBrainsMono Bold',
                     fontsize = 10,
                     margin_y = 3,
                     margin_x = 0,
@@ -127,17 +132,17 @@ screens = [
                 ),
                 widget.Prompt(),
                 widget.WindowName(),
-				widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[2]),
+		widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[2]),
                 widget.CurrentLayout(background = colours[2]),
-				widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[3], background = colours[2]),
-				# Use lshw to get the interface argument, which is the logical name, use a list for multiple entries if needed
-				widget.Net(interface = 'wlo1', format = '{down} ↓↑ {up}', background = colours[3]),
-				widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[2], background = colours[3]),
-				widget.CPU(background = colours[2]),
-				widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[3], background = colours[2]),
-				widget.TextBox(text = 'RAM', padding = 0, background = colours[3]),
-				widget.Memory(background = colours[3]),
-				widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[2], background = colours[3]),
+		widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[3], background = colours[2]),
+		# Use lshw to get the interface argument, which is the logical name, use a list for multiple entries if needed
+		widget.Net(interface = 'wlo1', format = '{down} ↓↑ {up}', background = colours[3]),
+		widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[2], background = colours[3]),
+		widget.CPU(background = colours[2]),
+		widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[3], background = colours[2]),
+		widget.TextBox(text = 'RAM', padding = 0, background = colours[3]),
+		widget.Memory(background = colours[3]),
+		widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[2], background = colours[3]),
                 widget.TextBox(text = 'Vol:', padding = 0, foreground = colours[4], background = colours[2]),
                 widget.Volume(foreground = colours[4], background = colours[2], padding = 5),
                 widget.TextBox(text = '', padding = 0, fontsize = 45, foreground = colours[3], background = colours[2]),
