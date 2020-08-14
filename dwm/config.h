@@ -1,4 +1,4 @@
-/* See LICENSE file for copyright and license details. */
+/* Place dwm.desktop file in /usr/share/xsessions and build dwm in home directory */
 // Pulseaudio volume controls
 #include <X11/XF86keysym.h>
 static const char *mutecmd[] = { "pactl", "set-sink-mute", "0", "toggle", NULL };

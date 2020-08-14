@@ -2024,7 +2024,7 @@ tile(Monitor *m)
 		} else {
 			h = (m->wh - ty) / (n - i) - gappx;
 			resize(c, m->wx + mw + gappx/ns, m->wy + ty, m->ww - mw - (2*c->bw) - gappx*(5-ns)/2, h - (2*c->bw), False);
-			ty += HEIGHT(c);
+			ty += HEIGHT(c) + gappx;
 		}
 }
 
