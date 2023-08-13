@@ -16,8 +16,6 @@ Plugin 'ycm-core/YouCompleteMe'
 
 call vundle#end()
 
-
-
 " Set encoding
 set encoding=utf-8
 
@@ -51,7 +49,7 @@ set expandtab
 " Incremental searching
 set incsearch
 
-" Use this to enable true colours for kitty, comment out for st
+" Use this to enable true colours for vim
 if (empty($TMUX))
 	if(has("nvim"))
 		let $NVUM_TUI_ENABLE_TRUE_COLOR=1
@@ -78,6 +76,9 @@ let g:python_highlight_all=1
 " To enable statusbar
 set laststatus=2
 
+" Prevent modes from showing below the status bar
+set noshowmode
+
 " Highlight current line
 set cursorline
 
@@ -86,4 +87,10 @@ let g:lightline = {
 	\ 'colorscheme': 'one',
 	\ }
 
+" Syntastic settings
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
 
+" Set fileformat, helps compatibility for files created in Windows
+set fileformat=unix
